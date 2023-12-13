@@ -1,22 +1,52 @@
-from fastapi import FastAPI, Depends, Request, WebSocket, HTTPException
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, Depends, Request, WebSocket, HTTPException, Response
+from fastapi.responses import FileResponse, RedirectResponse
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from typing import List
-from schemas import ChatRequest, ChatRequestCreate, UserRequest, UserRequestCreate
+from schemas import ChatRequest, ChatRequestCreate, UserRequest, UserRequestCreate, UserResponse
 from crud import get_chat, add_chat, create_user
 from models import Base, Chat, User
 from database import SessionLocal, engine
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+from fastapi_login import LoginManager
+from fastapi_login.exceptions import InvalidCredentialsException
+from fastapi.security import OAuth2PasswordRequestForm
 
 import logging
 
 Base.metadata.create_all(bind=engine)
 
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+class NotAuthenticatedException(Exception):
+    pass
+
+
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static", html=True), name="static")
 templates = Jinja2Templates(directory="templates")
+
+SECRET = "secret"
+login_manager = LoginManager(
+    SECRET, "/login", use_cookie=True, custom_exception=NotAuthenticatedException
+)
+
+
+@app.exception_handler(NotAuthenticatedException)
+def auth_exception_handler(request: Request, exec: NotAuthenticatedException):
+    return RedirectResponse(url="/login")
+
+
+def get_user(username: str, db: Session = Depends(get_db)):
+    return db.query(User).filter(User.username==username).first()
 
 
 class ConnectionManager:
@@ -65,32 +95,12 @@ async def websocket_endpoint(websocket: WebSocket):
 
 manager = ConnectionManager()
 
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
-def verify_user(db: Session, username: str, password: str):
-    user = db.query(User).filter(User.userId == username).first()
-    db.close()
-    if (
-        user and user.password == password
-    ):  # Replace this line with hashed password check if necessary
-        return True
-    else:
-        return False
-
-
-@app.get("/")
+@app.get("/chat")
 def get_index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 
-@app.get("/loginpage")
+@app.get("/login")
 def get_index(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
@@ -105,15 +115,29 @@ def post_chat(chat_req: ChatRequestCreate, db: Session = Depends(get_db)):
     return add_chat(db, chat_req)
 
 
-@app.post("/login")
-async def login(username: str, password: str):
-    if verify_user(username, password):
-        # Logic for successful login
-        return {"message": "Login successful"}
+@app.post("/token")
+def login(
+    response: Response,
+    data: OAuth2PasswordRequestForm = Depends(),
+    db: Session = Depends(get_db),
+):
+    username = data.username
+    password = data.password
+    user = get_user(username, db)
+
+    if not user or user.password != password:
+        raise InvalidCredentialsException
+    access_token = login_manager.create_access_token(data={"sub": username})
+    login_manager.set_cookie(response, access_token)
+    return {"access_token": access_token}
 
 
-@app.post("/register", response_model=List[UserRequest])
-def register(user_request: UserRequestCreate, db: Session = Depends(get_db)):
+
+@app.post("/register")
+def register(response: Response, user_request: UserRequestCreate, db: Session = Depends(get_db)):
     new_user = create_user(db, user_request)
-    logging.warning(f"New user data: {user_request}")
-    return new_user
+    access_token = login_manager.create_access_token(data={"sub": new_user.username})
+    login_manager.set_cookie(response, access_token)
+
+    return {"message": "User successfully registered", "access_token": access_token}
+

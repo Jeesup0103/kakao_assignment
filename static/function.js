@@ -1,7 +1,7 @@
 var ws = new WebSocket("ws://localhost:8000/ws");
 
 $(document).ready(function () {
-  var userID = "";
+  var username = "";
 
   $(".replybox-user1").on("submit", function (event) {
     event.preventDefault();
@@ -21,11 +21,11 @@ $(document).ready(function () {
 
   $(".IDsend-btn").click(function (event) {
     event.preventDefault();
-    userID = $(".userID").val();
-    if (userID) {
-      userID = userID.trim();
+    username = $(".username").val();
+    if (username) {
+      username = username.trim();
       fetchAndDisplayMessages();
-      $(".userID").val("");
+      $(".username").val("");
     } else {
       alert("Please enter a User ID.");
     }
@@ -39,7 +39,7 @@ $(document).ready(function () {
         $(".chat").empty();
         messages.forEach(function (message) {
           var messageElement;
-          if (message.name === userID) {
+          if (message.name === username) {
             messageElement = `
               <div class="mine">
                 <div class="time">${message.date}</div>
@@ -70,7 +70,7 @@ $(document).ready(function () {
   }
 
   function handleSubmitUser1() {
-    if (!userID) {
+    if (!username) {
       alert("Please set your User ID first.");
       return;
     }
@@ -87,7 +87,7 @@ $(document).ready(function () {
         (timeNow.getMinutes() < 10 ? "0" : "") +
         timeNow.getMinutes();
       var data = {
-        name: userID,
+        name: username,
         text: message.replace(/\n/g, "<br>"),
         date: formattedTime,
       };
@@ -110,7 +110,7 @@ $(document).ready(function () {
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
     var messageElement;
-    if (data.name === userID) {
+    if (data.name === username) {
       messageElement = `
       <div class="mine">
         <div class="time">${data.date}</div>

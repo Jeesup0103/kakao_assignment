@@ -20,7 +20,7 @@ class ChatRequest(ChatRequestBase):
 
 
 class UserRequestBase(BaseModel):
-    userId: str
+    username: str
     password: str
 
 
@@ -30,6 +30,13 @@ class UserRequestCreate(UserRequestBase):
 
 class UserRequest(UserRequestBase):
     index: Optional[int]
+
+    class Config:
+        orm_mode = True
+
+class UserResponse(BaseModel):
+    username: str
+    password: str
 
     class Config:
         orm_mode = True
