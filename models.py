@@ -13,5 +13,5 @@ class Chat(Base):
 class User(Base):
     __tablename__ = "users"
     index = Column(Integer, primary_key=True)
-    userId = Column(String)
+    username = Column(String)
     password = Column(String)

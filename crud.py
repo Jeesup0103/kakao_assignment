@@ -23,8 +23,8 @@ def add_chat(db: Session, item: ChatRequest) -> Chat:
 
 
 def create_user(db: Session, user_data: UserRequest) -> User:
-    new_user = User(userId=user_data.userId, password=user_data.password)
+    new_user = User(username=user_data.username, password=user_data.password)
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
-    return db.query(User).all()
+    return new_user
