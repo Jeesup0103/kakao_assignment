@@ -1,0 +1,128 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  margin-left: auto;
+  margin-right: auto;
+}
+.page {
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  border: 2px solid black;
+  border-radius: 3px;
+}
+.chat {
+  justify-content: center;
+  background-color: rgba(186, 207, 224, 255);
+  height: 500px;
+  overflow: auto;
+}
+.chat:first-child {
+  padding-top: 20px;
+}
+.mine {
+  display: flex;
+  justify-content: right;
+  margin-right: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.time {
+  margin-right: 5px;
+  margin-left: 5px;
+  font-size: 13px;
+}
+.myTalk {
+  background-color: rgba(255, 228, 3, 255);
+  max-width: 300px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  word-break: break-all;
+}
+.others {
+  margin-left: 10px;
+}
+.messageRow {
+  display: flex;
+  justify-content: left;
+  /* margin-left: 10px; */
+  padding-top: 5px;
+  padding-bottom: 10px;
+  word-break: break-all;
+}
+.messageRow > .time {
+  margin-left: 5px;
+}
+.otherTalk {
+  background-color: white;
+  max-width: 300px;
+  border-radius: 5px;
+  padding: 5px 10px;
+}
+.time {
+  margin-top: auto;
+}
+.image {
+  width: 220px;
+  height: 240px;
+}
+
+.reply-text {
+  width: 100%;
+  height: 130px;
+  resize: none;
+  font-size: 16px;
+  border: none;
+  border-top: 1px solid black;
+}
+.reply-text:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.replybox-user1,
+.replybox-user2 {
+  margin-bottom: 0px;
+  width: 500px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+}
+
+.send-btn {
+  background-color: rgba(255, 228, 3, 255);
+  font-size: 16px;
+  border: none;
+  width: 20%;
+  margin-left: auto;
+  border-radius: 5px;
+  padding: 8px 15px;
+}
+
+.replybox-user1 {
+  display: flex;
+  flex-direction: column;
+}
+
+.login {
+  margin-right: auto;
+  margin-left: auto;
+  margin-bottom: 15px;
+}
+.login input {
+  width: 430px;
+  height: 30px;
+  padding: 10px 20px;
+  text-align: center;
+  font-size: 16px;
+}
+
+.login .IDsend-btn {
+  background-color: rgba(255, 228, 3, 255);
+  height: 30px;
+  width: 70px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+}
