@@ -24,20 +24,27 @@ $(document).ready(function () {
   $("#registerBtn").on("click", function () {
     var username = $("#userId").val();
     var password = $("#password").val();
-    var data = {
-      username: username,
-      password: password,
-    };
-    $.ajax({
-      type: "POST",
-      url: "/register",
-      contentType: "application/json",
-      dataType: "json",
-      data: JSON.stringify(data),
-      success: function (response) {},
-      error: function (error) {
-        console.error("Error message:", error);
-      },
-    });
+    if (username && password) {
+      var data = {
+        username: username,
+        password: password,
+      };
+      $.ajax({
+        type: "POST",
+        url: "/register",
+        contentType: "application/json",
+        dataType: "json",
+        data: JSON.stringify(data),
+        success: function (response) {
+          $("#userId").val("");
+          $("#password").val("");
+        },
+        error: function (error) {
+          console.error("Error message:", error);
+        },
+      });
+    } else {
+      alert("Please enter a User ID and password.");
+    }
   });
 });
