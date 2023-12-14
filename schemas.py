@@ -40,3 +40,6 @@ class UserResponse(BaseModel):
 
     class Config:
         orm_mode = True
+        
+class AddFriendRequest(BaseModel):
+    username: str

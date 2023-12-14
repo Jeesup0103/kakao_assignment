@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from models import Chat, User
+from models import Chat, User, Friend
 from schemas import ChatRequest, UserRequest
 
 import logging
@@ -28,3 +28,14 @@ def create_user(db: Session, user_data: UserRequest) -> User:
     db.commit()
     db.refresh(new_user)
     return new_user
+
+def create_friendship(db: Session, username: str, friendname: str):
+    new_friend = Friend(username=username, friendname=friendname)
+    opposite_new_friend = Friend(username=friendname, friendname=username)
+
+    db.add(new_friend)
+    db.add(opposite_new_friend)
+    db.commit()
+
+    db.refresh(new_friend)
+    db.refresh(opposite_new_friend)

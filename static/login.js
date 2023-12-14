@@ -12,7 +12,7 @@ $(document).ready(function () {
         password: password,
       },
       success: function (data, txtStatus, xhr) {
-        window.location.href = "/chat"; // change
+        window.location.href = "/friends"; // change
       },
       error: function (error) {
         console.error("Error message:", error.responseText);

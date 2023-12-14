@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, ForeignKey
 from database import Base
 
 
@@ -15,3 +15,15 @@ class User(Base):
     index = Column(Integer, primary_key=True)
     username = Column(String)
     password = Column(String)
+
+class ChatList(Base):
+    __tablename__ = "chatlist"
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.index'))
+    chat_id = Column(Integer, ForeignKey('chats.index'))
+    
+class Friend(Base):
+    __tablename__ = "friends"
+    id = Column(Integer, primary_key=True)
+    username = Column(String, ForeignKey('users.index'))
+    friendname = Column(String, ForeignKey('users.index'))
