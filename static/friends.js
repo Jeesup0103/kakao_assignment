@@ -22,7 +22,7 @@ $(document).ready(function () {
     var username = $("#username").text();
     var friendname = $(this).text();
     $.ajax({
-      url: "/get-one-chat?user1=" + username + "&user2=" + friendname, // Replace with your API endpoint
+      url: "/get-one-chat?user1=" + username + "&user2=" + friendname,
       type: "GET",
       success: function (chat) {
         window.location.href = "/chat/" + chat.id;

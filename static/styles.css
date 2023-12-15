@@ -12,6 +12,17 @@
   border: 2px solid black;
   border-radius: 3px;
 }
+.chat-header {
+  background-color: rgb(230, 237, 243);
+  font-size: 30px;
+}
+.chat-header a {
+  text-decoration: none;
+  margin-left: 15px;
+}
+.chat-header a:visited {
+  text-decoration: none;
+}
 .chat {
   justify-content: center;
   background-color: rgba(186, 207, 224, 255);
@@ -19,6 +30,7 @@
   overflow: auto;
 }
 .chat:first-child {
+  margin-top: 5px;
   padding-top: 20px;
 }
 .mine {
@@ -46,7 +58,6 @@
 .messageRow {
   display: flex;
   justify-content: left;
-  /* margin-left: 10px; */
   padding-top: 5px;
   padding-bottom: 10px;
   word-break: break-all;
@@ -192,12 +203,14 @@
 }
 
 /* FRIENDS PAGE  */
-#friendPage {
+#friendPage,
+#chatlistPage {
   height: 680px;
   display: flex;
   flex-direction: column;
 }
-#friendTitle {
+#friendTitle,
+#chatlistTItle {
   padding: 10px;
   display: block;
   font-size: 36px;
@@ -223,6 +236,7 @@
 }
 
 #friend-list {
+  overflow: auto;
   list-style-type: none;
   padding: 0;
   margin: 0;
@@ -240,4 +254,58 @@
 
 #friend-list li:hover {
   background-color: rgba(255, 228, 3, 0.6);
+}
+
+/* FOOTER */
+#footer {
+  margin-top: auto;
+  width: 100%;
+  background-color: rgb(236, 236, 236); /* Change the color as needed */
+  border-top: 1px solid black;
+  text-align: center;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+#footer button {
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin: 10px;
+  font-size: 16px;
+  border: 0.5px solid black;
+  background-color: gainsboro;
+}
+
+#footer button:hover {
+  background-color: rgba(212, 212, 212, 0.8);
+}
+
+/* CHATLIST PAGE */
+#chatlist-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+#chatlist-list li {
+  font-size: 20px;
+  padding: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+#chatlist-list li:first-of-type {
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+#chatlist-list li:hover {
+  background-color: rgba(255, 228, 3, 0.6);
+}
+
+.chatlist-info {
+  font-size: 20px;
+}
+
+.chat-latest-message {
+  font-size: 18px;
 }

@@ -2,11 +2,6 @@ from sqlalchemy import Column, Integer, String, ForeignKey, Table
 from database import Base
 from sqlalchemy.orm import relationship
 
-# Association table
-chat_user_link = Table('chat_user_link', Base.metadata,
-    Column('chat_id', Integer, ForeignKey('chatlist.id')),
-    Column('username', Integer, ForeignKey('users.username'))
-)
 
 class Chat(Base):
     __tablename__ = "chats"
@@ -21,12 +16,12 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     username = Column(String)
     password = Column(String)
-    chats = relationship('ChatList', secondary=chat_user_link)
 
 class ChatList(Base):
     __tablename__ = "chatlist"
     id = Column(Integer, primary_key=True)
-    users = relationship('User', secondary=chat_user_link)
+    user1 = Column(String, ForeignKey("users.username"))
+    user2 = Column(String, ForeignKey("users.username"))
     
 class Friend(Base):
     __tablename__ = "friends"

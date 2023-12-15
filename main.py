@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends, Request, WebSocket, HTTPException, Respons
 from fastapi.responses import FileResponse, RedirectResponse
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
+from sqlalchemy import func, desc
 from typing import List
 from schemas import ChatRequest, ChatRequestCreate, UserRequest, UserRequestCreate, UserResponse, AddFriendRequest
 from crud import get_chat, add_chat, create_user, create_friendship, create_chat
@@ -113,10 +114,14 @@ def get_login_page(request: Request):
 def get_friends_page(request: Request):
     return templates.TemplateResponse("friends.html", {"request": request})
 
+@app.get("/chatlist")
+def get_chatlists_page(request: Request):
+    return templates.TemplateResponse("chatlist.html", {"request": request})
+
+
 @app.get("/getchat/{chat_id}", response_model=List[ChatRequest])
 def get_data(chat_id:int, db: Session = Depends(get_db)):
     return get_chat(db, chat_id)
-
 
 @app.post("/postchat", response_model=List[ChatRequest])
 def post_chat(chat_req: ChatRequestCreate, db: Session = Depends(get_db)):
@@ -147,6 +152,12 @@ def register(response: Response, user_request: UserRequestCreate, db: Session = 
 
     return {"message": "User successfully registered", "access_token": access_token}
 
+@app.get("/logout")
+def logout(response: Response):
+    response=RedirectResponse("/login", status_code=302)
+    response.delete_cookie(key="access-token")
+    return response
+
 @app.get("/get-username")
 def get_username(current_user: User = Depends(login_manager)):
     return current_user.username
@@ -164,14 +175,13 @@ def get_friends(db: Session = Depends(get_db), current_user: User = Depends(logi
     return friend_usernames
 
 @app.post("/add-friend")
-def add_friend(request: AddFriendRequest, db: Session = Depends(get_db), current_user: User =Depends(login_manager)):
+def add_friend(request: AddFriendRequest, db: Session = Depends(get_db), current_user: User = Depends(login_manager)):
     friend_user = db.query(User).filter(User.username == request.username).first()
 
     if not friend_user:
         raise HTTPException(status_code=404, detail="Friend not found")
     create_friendship(db, current_user.username, friend_user.username)
     return {"message": "Friend successfully registered"}
-   
    
 @app.get("/get-one-chat")
 def get_one_chat(user1: str, user2: str, db: Session = Depends(get_db)):
@@ -183,15 +193,44 @@ def get_one_chat(user1: str, user2: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="User not found")
 
     chat = db.query(ChatList).filter(
-        ChatList.users.any(username=user1_obj.username) & ChatList.users.any(username=user2_obj.username)
+        (ChatList.user1 == user1_obj.username) & (ChatList.user2 == user2_obj.username)
     ).first()
 
     if not chat:
+        chat = db.query(ChatList).filter(
+            (ChatList.user1 == user2_obj.username) & (ChatList.user2 == user1_obj.username)
+        ).first()
+    if not chat:
         create_chat(db, user1_obj, user2_obj)
         chat = db.query(ChatList).filter(
-            ChatList.users.any(username=user1_obj.username) & ChatList.users.any(username=user2_obj.username)
+            (ChatList.user1 == user1_obj.username) & (ChatList.user2 == user2_obj.username)
         ).first()
 
-    # Retrieve and return chat data
-    # You might want to transform the chat data into a more convenient format
     return chat
+
+@app.get("/get-chatlist")
+def get_chat_list(db: Session = Depends(get_db), current_user: User = Depends(login_manager)):
+    # Query to find chat lists involving the current user
+    chat_lists = db.query(
+        ChatList.id,
+        ChatList.user1,
+        ChatList.user2,
+        Chat.text,
+        func.max(Chat.date).label("latest_date")
+    ).join(Chat, ChatList.id == Chat.chatlist_id)\
+    .filter((ChatList.user1 == current_user.username) | (ChatList.user2 == current_user.username))\
+    .group_by(ChatList.id, ChatList.user1, ChatList.user2)\
+    .order_by(desc("latest_date"))\
+    .all()
+
+    # Process the query results
+    results = []
+    for chat_id, user1, user2, latest_text, _ in chat_lists:
+        opponent_user = user1 if user1 != current_user.username else user2
+        results.append({
+            "chat_id": chat_id,
+            "opponent_username": opponent_user,
+            "latest_message": latest_text
+        })
+
+    return results
