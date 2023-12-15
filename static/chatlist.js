@@ -8,7 +8,7 @@ $(document).ready(function () {
   });
   // Load chat list on page load
   $.ajax({
-    url: "/get-chatlist", // Replace with your API endpoint
+    url: "/get-chatlist",
     type: "GET",
     success: function (chatlist) {
       chatlist.forEach(function (chat) {
@@ -26,12 +26,12 @@ $(document).ready(function () {
     },
   });
 
-  // Handle friend selection
+  // Handle chat selection
   $(document).on("click", ".chatlist-item", function () {
     var username = $("#username").text();
-    var friendname = $(".chatlist-info").text();
+    var friendname = $(this).find(".chatlist-info").text();
     $.ajax({
-      url: "/get-one-chat?user1=" + username + "&user2=" + friendname, // Replace with your API endpoint
+      url: "/get-one-chat?user1=" + username + "&user2=" + friendname,
       type: "GET",
       success: function (chat) {
         window.location.href = "/chat/" + chat.id;
