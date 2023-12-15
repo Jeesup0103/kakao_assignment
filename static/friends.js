@@ -1,10 +1,16 @@
 $(document).ready(function () {
+  $.ajax({
+    url: "/get-username",
+    type: "GET",
+    success: function (name) {
+      $("#username").text(name);
+    },
+  });
   // Load friends list on page load
   $.ajax({
     url: "/get-friends", // Replace with your API endpoint
     type: "GET",
     success: function (friends) {
-      console.log(friends);
       friends.forEach(function (friend) {
         $("#friend-list").append('<li class="friend-item">' + friend + "</li>");
       });
@@ -13,19 +19,19 @@ $(document).ready(function () {
 
   // Handle friend selection
   $(document).on("click", ".friend-item", function () {
-    var friendId = $(this).data("id");
+    var username = $("#username").text();
+    var friendname = $(this).text();
     $.ajax({
-      url: "/api/get-chat/" + friendId, // Replace with your API endpoint
+      url: "/get-one-chat?user1=" + username + "&user2=" + friendname, // Replace with your API endpoint
       type: "GET",
-      success: function (chatData) {
-        // Update the chat container with the chat data
-        // ...
+      success: function (chat) {
+        window.location.href = "/chat/" + chat.id;
       },
     });
   });
 
   // Add friend button functionality
-  $("#add-friend-button").click(function () {
+  $("#add-friend-btn").click(function () {
     var friendUsername = prompt("Enter the username of the friend:");
     var data = { username: friendUsername };
     $.ajax({

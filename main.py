@@ -4,8 +4,8 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from typing import List
 from schemas import ChatRequest, ChatRequestCreate, UserRequest, UserRequestCreate, UserResponse, AddFriendRequest
-from crud import get_chat, add_chat, create_user, create_friendship
-from models import Base, Chat, User, Friend
+from crud import get_chat, add_chat, create_user, create_friendship, create_chat
+from models import Base, Chat, User, Friend, ChatList
 from database import SessionLocal, engine
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
@@ -100,22 +100,22 @@ async def websocket_endpoint(websocket: WebSocket):
 
 manager = ConnectionManager()
 
-@app.get("/chat")
-def get_index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+@app.get("/chat/{chat_id}")
+def get_chat_page(request: Request, chat_id:int):
+    return templates.TemplateResponse("chat.html", {"request": request})
 
 
 @app.get("/login")
-def get_index(request: Request):
+def get_login_page(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
 @app.get("/friends")
-def get_index(request: Request):
+def get_friends_page(request: Request):
     return templates.TemplateResponse("friends.html", {"request": request})
 
-@app.get("/getchat", response_model=List[ChatRequest])
-def get_data(db: Session = Depends(get_db)):
-    return get_chat(db)
+@app.get("/getchat/{chat_id}", response_model=List[ChatRequest])
+def get_data(chat_id:int, db: Session = Depends(get_db)):
+    return get_chat(db, chat_id)
 
 
 @app.post("/postchat", response_model=List[ChatRequest])
@@ -147,6 +147,10 @@ def register(response: Response, user_request: UserRequestCreate, db: Session = 
 
     return {"message": "User successfully registered", "access_token": access_token}
 
+@app.get("/get-username")
+def get_username(current_user: User = Depends(login_manager)):
+    return current_user.username
+
 @app.get("/get-friends")
 def get_friends(db: Session = Depends(get_db), current_user: User = Depends(login_manager)):
     # Query for the current user's friends
@@ -168,3 +172,26 @@ def add_friend(request: AddFriendRequest, db: Session = Depends(get_db), current
     create_friendship(db, current_user.username, friend_user.username)
     return {"message": "Friend successfully registered"}
    
+   
+@app.get("/get-one-chat")
+def get_one_chat(user1: str, user2: str, db: Session = Depends(get_db)):
+    # Find User based on usernames
+    user1_obj = db.query(User).filter(User.username == user1).first()
+    user2_obj = db.query(User).filter(User.username == user2).first()
+
+    if not user1_obj or not user2_obj:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    chat = db.query(ChatList).filter(
+        ChatList.users.any(username=user1_obj.username) & ChatList.users.any(username=user2_obj.username)
+    ).first()
+
+    if not chat:
+        create_chat(db, user1_obj, user2_obj)
+        chat = db.query(ChatList).filter(
+            ChatList.users.any(username=user1_obj.username) & ChatList.users.any(username=user2_obj.username)
+        ).first()
+
+    # Retrieve and return chat data
+    # You might want to transform the chat data into a more convenient format
+    return chat

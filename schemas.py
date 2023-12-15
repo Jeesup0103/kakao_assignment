@@ -3,6 +3,7 @@ from typing import Optional
 
 
 class ChatRequestBase(BaseModel):
+    chatlist_id:Optional[int]
     name: str
     text: str
     date: str
@@ -13,7 +14,7 @@ class ChatRequestCreate(ChatRequestBase):
 
 
 class ChatRequest(ChatRequestBase):
-    index: Optional[int]
+    id: Optional[int]
 
     class Config:
         orm_mode = True
@@ -29,7 +30,7 @@ class UserRequestCreate(UserRequestBase):
 
 
 class UserRequest(UserRequestBase):
-    index: Optional[int]
+    id: Optional[int]
 
     class Config:
         orm_mode = True
@@ -43,3 +44,4 @@ class UserResponse(BaseModel):
         
 class AddFriendRequest(BaseModel):
     username: str
+    

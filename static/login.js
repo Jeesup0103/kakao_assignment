@@ -12,6 +12,8 @@ $(document).ready(function () {
         password: password,
       },
       success: function (data, txtStatus, xhr) {
+        $("#userId").val("");
+        $("#password").val("");
         window.location.href = "/friends"; // change
       },
       error: function (error) {

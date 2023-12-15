@@ -5,6 +5,7 @@
   margin-right: auto;
 }
 .page {
+  margin-top: 30px;
   width: 500px;
   margin-left: auto;
   margin-right: auto;
@@ -193,7 +194,6 @@
 /* FRIENDS PAGE  */
 #friendPage {
   height: 680px;
-  margin-top: 30px;
   display: flex;
   flex-direction: column;
 }
@@ -203,6 +203,13 @@
   font-size: 36px;
   border-bottom: 1px solid black;
 }
+
+#username {
+  font-size: 20px;
+  padding: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
 #add-friend-btn {
   margin: 5px;
   background-color: rgba(255, 228, 3, 255);
