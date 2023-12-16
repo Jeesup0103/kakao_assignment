@@ -12,13 +12,15 @@ $(document).ready(function () {
     type: "GET",
     success: function (chatlist) {
       chatlist.forEach(function (chat) {
+        var latestMessage = chat.latest_message ? chat.latest_message : "media";
+
         $("#chatlist-list").append(
           '<li class="chatlist-item">' +
             '<div class="chatlist-info"><strong>' +
             chat.opponent_username +
             "</strong></div>" +
             '<div class="chat-latest-message">' +
-            chat.latest_message +
+            latestMessage +
             "</div>" +
             "</li>"
         );
