@@ -9,6 +9,8 @@ class Chat(Base):
     name = Column(String)
     text = Column(String)
     date = Column(String)
+    image_url=Column(String, nullable=True)
+    video_url=Column(String, nullable=True)
     chatlist_id = Column(Integer, ForeignKey('chatlist.id')) 
 
 class User(Base):

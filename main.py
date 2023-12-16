@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, Request, WebSocket, HTTPException, Response
+from fastapi import FastAPI, Depends, Request, WebSocket, HTTPException, Response, UploadFile, File, Form
 from fastapi.responses import FileResponse, RedirectResponse
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
@@ -13,6 +13,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi_login import LoginManager
 from fastapi_login.exceptions import InvalidCredentialsException
 from fastapi.security import OAuth2PasswordRequestForm
+import json
 
 import logging
 
@@ -33,6 +34,7 @@ class NotAuthenticatedException(Exception):
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static", html=True), name="static")
+app.mount("/assets", StaticFiles(directory="assets"), name="assets")
 templates = Jinja2Templates(directory="templates")
 
 SECRET = "secret"
@@ -234,3 +236,21 @@ def get_chat_list(db: Session = Depends(get_db), current_user: User = Depends(lo
         })
 
     return results
+
+@app.post("/upload-media")
+async def upload_media(chatlist_id: int = Form(...), date: str = Form(...), media: UploadFile = File(...), db: Session = Depends(get_db), current_user: User = Depends(login_manager)):
+    file_location = f"assets/{'image' if 'image' in media.content_type else 'video'}/{media.filename}"
+    with open(file_location, "wb") as file_object:
+        file_object.write(await media.read())
+
+    # Assuming you have a method to determine the type (image or video) and set the appropriate URL
+    image_url = file_location if 'image' in media.content_type else None
+    video_url = file_location if 'video' in media.content_type else None
+
+    # Save the media URL and other details in the database
+    new_chat = Chat(chatlist_id=chatlist_id, date=date, image_url=image_url, video_url=video_url, name=current_user.username)
+    db.add(new_chat)
+    db.commit()
+    db.refresh(new_chat)
+
+    return new_chat

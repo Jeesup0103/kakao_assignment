@@ -118,6 +118,57 @@
   flex-direction: column;
 }
 
+.flex-row {
+  display: flex;
+  align-items: center; /* Align items vertically in the center */
+  justify-content: flex-start; /* Align items horizontally at the start */
+}
+
+.upload-media-form {
+  display: flex;
+  align-items: center; /* Align form elements in the center */
+  margin-bottom: 0px;
+  margin-left: 10px; /* Optional spacing between the button and the form */
+}
+
+#toggle-media-upload {
+  background-color: rgba(255, 228, 3, 255);
+  font-size: 20px;
+  border-radius: 5px;
+  border: 0.5px solid gray;
+  margin-left: 2px;
+  margin-bottom: 2px;
+}
+
+#media-upload {
+  margin-left: 10px;
+  width: 55%;
+  border-radius: 5px;
+}
+
+.chat .media {
+  /* Common styles for both images and videos */
+  max-width: 200px; /* Adjust width as needed */
+  max-height: 200px; /* Adjust height as needed */
+  object-fit: cover; /* This ensures that the aspect ratio is maintained */
+}
+
+.chat img {
+  /* Specific styles for images */
+  width: 100%; /* Makes the image responsive within its container */
+  height: auto; /* Keeps the aspect ratio of the image */
+}
+
+.chat video {
+  /* Specific styles for videos */
+  width: 100%; /* Makes the video responsive within its container */
+}
+
+#upload-media-form {
+  display: flex;
+  justify-content: space-around;
+}
+
 /* LOGIN PAGE  */
 .login {
   margin-right: auto;

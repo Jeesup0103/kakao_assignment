@@ -9,6 +9,7 @@ $(document).ready(function () {
     },
   });
   fetchAndDisplayMessages();
+  $(".chat").scrollTop($(".chat")[0].scrollHeight);
 
   $(".replybox-user1").on("submit", function (event) {
     event.preventDefault();
@@ -26,11 +27,55 @@ $(document).ready(function () {
     }
   });
 
+  $("#toggle-media-upload").click(function () {
+    $("#media-upload-form").toggle();
+  });
+
+  $("#media-upload-form").submit(function (e) {
+    const mediaInput = $("#media-upload")[0];
+    if (mediaInput.files.length === 0) {
+      alert("파일을 선택해주세요");
+    } else {
+      const timeNow = new Date();
+      const formattedTime =
+        (timeNow.getHours() >= 12 ? " 오후 " : " 오전 ") +
+        (timeNow.getHours() % 12 || 12) +
+        ":" +
+        (timeNow.getMinutes() < 10 ? "0" : "") +
+        timeNow.getMinutes();
+      const currentUrl = window.location.href;
+      const match = currentUrl.match(/\/(\d+)$/);
+      const chatlist_id = match[1];
+      const formData = new FormData();
+      formData.append("media", mediaInput.files[0]);
+      formData.append("date", formattedTime);
+      formData.append("chatlist_id", chatlist_id);
+      for (var key of formData.keys()) {
+        console.log(key);
+      }
+      for (var value of formData.values()) {
+        console.log(value);
+      }
+
+      $.ajax({
+        url: "/upload-media",
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+          ws.send(JSON.stringify(response));
+          window.location.reload();
+        },
+      });
+    }
+  });
+
   function fetchAndDisplayMessages() {
     var currentUrl = window.location.href;
-    var match = currentUrl.match(/\/(\d+)$/); // Regular expression to find the last number in the URL
+    var match = currentUrl.match(/\/(\d+)$/);
     if (match) {
-      var chatId = match[1]; // The first capturing group contains the chat ID
+      var chatId = match[1];
       $.ajax({
         url: "/getchat/" + chatId,
         type: "get",
@@ -38,27 +83,64 @@ $(document).ready(function () {
           $(".chat").empty();
           messages.forEach(function (message) {
             var messageElement;
+            console.log(message);
             if (message.name === username) {
               messageElement = `
-                <div class="mine">
+              <div class="mine">
+                <div class="messageRow">
                   <div class="time">${message.date}</div>
-                  <div class="myTalk text" style="white-space: pre-wrap;">${message.text}</div>
+                  ${
+                    message.text
+                      ? `<div class="myTalk text">${message.text}</div>`
+                      : ""
+                  }
+                  ${
+                    message.image_url
+                      ? `<a href="/${message.image_url}" target="_blank">
+                          <img src="/${message.image_url}" class="media">
+                        </a>`
+                      : ""
+                  }
+                  ${
+                    message.video_url
+                      ? `
+                          <video controls class="media"><source src="/${message.video_url}" type="video/mp4"></video>
+                        `
+                      : ""
+                  }
                 </div>
-              `;
-              $(".user1").append(messageElement);
+              </div>
+            `;
             } else {
               messageElement = `
-                <div class="others">
-                  <div class="otherName">${message.name}</div>
-                  <div class="messageRow">
-                    <div class="otherTalk text" style="white-space: pre-wrap;">${message.text}</div>
-                    <div class="time">${message.date}</div>
-                  </div>
-
+              <div class="others">
+                <div class="otherName">${message.name}</div>
+                <div class="messageRow">
+                  ${
+                    message.text
+                      ? `<div class="otherTalk text">${message.text}</div>`
+                      : ""
+                  }
+                  ${
+                    message.image_url
+                      ? `<a href="/${message.image_url}" target="_blank">
+                          <img src="/${message.image_url}" class="media">
+                        </a>`
+                      : ""
+                  }
+                  ${
+                    message.video_url
+                      ? `
+                          <video controls class="media"><source src="/${message.video_url}" type="video/mp4"></video>
+                        `
+                      : ""
+                  }
+                  <div class="time">${message.date}</div>
                 </div>
-              `;
-              $(".user1").append(messageElement);
+              </div>
+            `;
             }
+            $(".user1").append(messageElement);
           });
           $(".chat").scrollTop($(".chat")[0].scrollHeight);
         },
@@ -116,21 +198,51 @@ $(document).ready(function () {
     var messageElement;
     if (data.name === username) {
       messageElement = `
-      <div class="mine">
-        <div class="time">${data.date}</div>
-        <div class="myTalk text" style="white-space: pre-wrap;">${data.text}</div>
-      </div>
-    `;
+        <div class="mine">
+          <div class="messageRow">
+            <div class="time">${data.date}</div>
+            ${data.text ? `<div class="myTalk text">${data.text}</div>` : ""}
+            ${
+              data.image_url
+                ? `<a href="/${data.image_url}" target="_blank">
+                    <img src="/${data.image_url}" class="media">
+                  </a>`
+                : ""
+            }
+            ${
+              data.video_url
+                ? `
+                    <video controls class="media"><source src="/${data.video_url}" type="video/mp4"></video>
+                  `
+                : ""
+            }
+          </div>
+        </div>
+      `;
     } else {
       messageElement = `
-      <div class="others">
-        <div class="otherName">${data.name}</div>
-        <div class="messageRow">
-          <div class="otherTalk text" style="white-space: pre-wrap;">${data.text}</div>
-          <div class="time">${data.date}</div>
+        <div class="others">
+          <div class="otherName">${data.name}</div>
+          <div class="messageRow">
+            ${data.text ? `<div class="otherTalk text">${data.text}</div>` : ""}
+            ${
+              data.image_url
+                ? `<a href="/${data.image_url}" target="_blank">
+                    <img src="/${data.image_url}" class="media">
+                  </a>`
+                : ""
+            }
+            ${
+              data.video_url
+                ? `
+                    <video controls class="media"><source src="/${data.video_url}" type="video/mp4"></video>
+                  `
+                : ""
+            }
+            <div class="time">${data.date}</div>
+          </div>
         </div>
-      </div>
-    `;
+      `;
     }
     $(".user1").append(messageElement);
     $(".chat").scrollTop($(".chat")[0].scrollHeight);
