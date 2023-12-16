@@ -34,7 +34,8 @@ DB 구조를 관리하는 파일이다.
 DB 스키마를 통해 request와 response를 돕는 파일이다.
 
 ## DB Diagram
-![alt text](https://github.com/Jeesup0103/kakao_assignment/tree/main/md-image/diagram.png?raw=true)
+<img width="890" alt="diagram" src="https://github.com/Jeesup0103/kakao_assignment/assets/76239832/1f6f9f53-84ef-475b-a232-77de6dcbf3b0">
+
 
 ## How to run
 
