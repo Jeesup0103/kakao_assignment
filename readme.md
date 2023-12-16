@@ -8,6 +8,8 @@
 - sqlite
 - Jinja template
 - sqlalchemy
+## 2 Additional Functions
+Image, Video 
 
 ## Installation
 
