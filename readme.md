@@ -47,7 +47,7 @@
 
 ### 1 to 1 Chatting
 
-> http://127.0.0.1:8000/chat/chat_id
+> http://127.0.0.1:8000/chat/{chat_id}
 
 해당 친구와의 채팅 기록이 있다면 불러오게 되고 아니면 새로 시작하게 된다.
 
@@ -77,7 +77,7 @@ friend list 페이지에서 하단에 Chats 버튼을 클릭하면 chat list 페
 
 ### Sending and Viewing Photo in Chatting room
 
-> http://127.0.0.1:8000/chat/chat_id
+> http://127.0.0.1:8000/chat/{chat_id}
 
 이미지 전송은 친구와의 채팅 방에서 이루어진다. 아무 친구를 선택해 대화방에 입장을 한다.
 
@@ -93,7 +93,7 @@ friend list 페이지에서 하단에 Chats 버튼을 클릭하면 chat list 페
 
 ### Sending and Viewing Video in Chatting room
 
-> http://127.0.0.1:8000/chat/chat_id
+> http://127.0.0.1:8000/chat/{chat_id}
 
 동영상 전송은 친구와의 채팅 방에서 이루어진다. 아무 친구를 선택해 대화방에 입장을 한다.
 
