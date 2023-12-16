@@ -1,0 +1,362 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  margin-left: auto;
+  margin-right: auto;
+}
+.page {
+  margin-top: 30px;
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  border: 2px solid black;
+  border-radius: 3px;
+}
+.chat-header {
+  background-color: rgb(230, 237, 243);
+  font-size: 30px;
+}
+.chat-header a {
+  text-decoration: none;
+  margin-left: 15px;
+}
+.chat-header a:visited {
+  text-decoration: none;
+}
+.chat {
+  justify-content: center;
+  background-color: rgba(186, 207, 224, 255);
+  height: 500px;
+  overflow: auto;
+}
+.chat:first-child {
+  margin-top: 5px;
+  padding-top: 20px;
+}
+.mine {
+  display: flex;
+  justify-content: right;
+  margin-right: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.time {
+  margin-right: 5px;
+  margin-left: 5px;
+  font-size: 13px;
+}
+.myTalk {
+  background-color: rgba(255, 228, 3, 255);
+  max-width: 300px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  word-break: break-all;
+}
+.others {
+  margin-left: 10px;
+}
+.messageRow {
+  display: flex;
+  justify-content: left;
+  padding-top: 5px;
+  padding-bottom: 10px;
+  word-break: break-all;
+}
+.messageRow > .time {
+  margin-left: 5px;
+}
+.otherTalk {
+  background-color: white;
+  max-width: 300px;
+  border-radius: 5px;
+  padding: 5px 10px;
+}
+.time {
+  margin-top: auto;
+}
+.image {
+  width: 220px;
+  height: 240px;
+}
+
+.reply-text {
+  width: 100%;
+  height: 130px;
+  resize: none;
+  font-size: 16px;
+  border: none;
+  border-top: 1px solid black;
+}
+.reply-text:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.replybox-user1,
+.replybox-user2 {
+  margin-bottom: 0px;
+  width: 500px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+}
+
+.send-btn {
+  background-color: rgba(255, 228, 3, 255);
+  font-size: 16px;
+  border: none;
+  width: 20%;
+  margin-left: auto;
+  border-radius: 5px;
+  padding: 8px 15px;
+  cursor: pointer;
+}
+
+.replybox-user1 {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-row {
+  display: flex;
+  align-items: center; /* Align items vertically in the center */
+  justify-content: flex-start; /* Align items horizontally at the start */
+}
+
+.upload-media-form {
+  display: flex;
+  align-items: center; /* Align form elements in the center */
+  margin-bottom: 0px;
+  margin-left: 10px; /* Optional spacing between the button and the form */
+}
+
+#toggle-media-upload {
+  background-color: rgba(255, 228, 3, 255);
+  font-size: 20px;
+  border-radius: 5px;
+  border: 0.5px solid gray;
+  margin-left: 2px;
+  margin-bottom: 2px;
+}
+
+#media-upload {
+  margin-left: 10px;
+  width: 55%;
+  border-radius: 5px;
+}
+
+.chat .media {
+  /* Common styles for both images and videos */
+  max-width: 200px; /* Adjust width as needed */
+  max-height: 200px; /* Adjust height as needed */
+  object-fit: cover; /* This ensures that the aspect ratio is maintained */
+}
+
+.chat img {
+  /* Specific styles for images */
+  width: 100%; /* Makes the image responsive within its container */
+  height: auto; /* Keeps the aspect ratio of the image */
+}
+
+.chat video {
+  /* Specific styles for videos */
+  width: 100%; /* Makes the video responsive within its container */
+}
+
+#upload-media-form {
+  display: flex;
+  justify-content: space-around;
+}
+
+/* LOGIN PAGE  */
+.login {
+  margin-right: auto;
+  margin-left: auto;
+  margin-bottom: 15px;
+}
+.login input {
+  width: 430px;
+  height: 30px;
+  padding: 10px 20px;
+  text-align: center;
+  font-size: 16px;
+}
+
+.login .IDsend-btn {
+  background-color: rgba(255, 228, 3, 255);
+  height: 30px;
+  width: 70px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.loginPage {
+  height: 680px;
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.loginTitle {
+  display: block;
+  margin-top: 150px;
+  margin-bottom: 100px;
+  text-align: center;
+  font-size: 36px;
+}
+
+#loginForm {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#userId,
+#password {
+  width: 60%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: large;
+}
+#loginForm button[type="submit"] {
+  background-color: rgba(255, 228, 3, 255);
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 30%;
+  margin-top: 50px;
+  font-size: large;
+}
+
+#registerBtn {
+  background-color: rgba(255, 228, 3, 255);
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 30%;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: large;
+}
+
+#loginForm button[type="submit"]:hover,
+#registerBtn:hover,
+#add-friend-btn:hover {
+  background-color: rgba(255, 228, 3, 0.8);
+}
+
+/* FRIENDS PAGE  */
+#friendPage,
+#chatlistPage {
+  height: 680px;
+  display: flex;
+  flex-direction: column;
+}
+#friendTitle,
+#chatlistTItle {
+  padding: 10px;
+  display: block;
+  font-size: 36px;
+  border-bottom: 1px solid black;
+}
+
+#username {
+  font-size: 20px;
+  padding: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+#add-friend-btn {
+  margin: 5px;
+  background-color: rgba(255, 228, 3, 255);
+  font-size: 16px;
+  border: none;
+  width: 30%;
+  margin-left: auto;
+  border-radius: 5px;
+  padding: 8px 15px;
+  cursor: pointer;
+}
+
+#friend-list {
+  overflow: auto;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+#friend-list li {
+  font-size: 20px;
+  padding: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+#friend-list li:first-of-type {
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+#friend-list li:hover {
+  background-color: rgba(255, 228, 3, 0.6);
+}
+
+/* FOOTER */
+#footer {
+  margin-top: auto;
+  width: 100%;
+  background-color: rgb(236, 236, 236); /* Change the color as needed */
+  border-top: 1px solid black;
+  text-align: center;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+#footer button {
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin: 10px;
+  font-size: 16px;
+  border: 0.5px solid black;
+  background-color: gainsboro;
+}
+
+#footer button:hover {
+  background-color: rgba(212, 212, 212, 0.8);
+}
+
+/* CHATLIST PAGE */
+#chatlist-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+#chatlist-list li {
+  font-size: 20px;
+  padding: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+#chatlist-list li:first-of-type {
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+#chatlist-list li:hover {
+  background-color: rgba(255, 228, 3, 0.6);
+}
+
+.chatlist-info {
+  font-size: 20px;
+}
+
+.chat-latest-message {
+  font-size: 18px;
+}
