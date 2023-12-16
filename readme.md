@@ -13,6 +13,29 @@
 
 > pip install -r requirements.txt
 
+## Code Structure
+assets 폴더에서 이미지와 동영상의 저장을 관리한다. static 폴더에서 js 파일들과 css 파일을 관리한다. templates 폴더에서 html 파일들을 관리한다.
+
+- crud.py
+
+DB에서 읽거나 쓰는 함수들을 관리하는 파일이다.
+- database.py
+
+DB 설정 파일이다.
+- main.py
+
+API 관리와 웹소켓 관리를 하는 파일이다.
+- models.py
+
+DB 구조를 관리하는 파일이다.
+
+- schemas.py
+
+DB 스키마를 통해 request와 response를 돕는 파일이다.
+
+## DB Diagram
+![alt text](https://github.com/Jeesup0103/kakao_assignment/md-image/main/diagram.png?raw=true)
+
 ## How to run
 
 > uvicorn main:app
